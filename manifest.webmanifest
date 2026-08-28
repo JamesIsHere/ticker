@@ -1,6 +1,6 @@
 {
-  "name": "Market Lens",
-  "short_name": "Markets",
+  "name": "Ticker",
+  "short_name": "Ticker",
   "description": "A clear view of S&P 500 performance across five time horizons.",
   "start_url": "./",
   "display": "standalone",
