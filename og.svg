@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 933" role="img" aria-label="Ticker financial time-series dashboard">
+  <defs>
+    <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b7ff00" stop-opacity=".25"/>
+      <stop offset="1" stop-color="#b7ff00" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-40%" width="140%" height="180%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1792" height="933" fill="#0b0d10"/>
+  <g stroke="#ffffff" stroke-opacity=".065" stroke-width="2">
+    <path d="M80 322H1712M80 472H1712M80 622H1712M80 772H1712"/>
+    <path d="M352 280V820M624 280V820M896 280V820M1168 280V820M1440 280V820"/>
+  </g>
+  <text x="80" y="105" fill="#b7ff00" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="7">TICKER</text>
+  <text x="80" y="205" fill="#f3f1e9" font-family="Georgia, serif" font-size="76">Markets and indicators over time.</text>
+  <path d="M80 794 192 746 304 767 416 673 528 705 640 585 752 631 864 493 976 544 1088 405 1200 450 1312 317 1424 365 1540 213 1712 267V850H80Z" fill="url(#area)"/>
+  <path d="M80 794 192 746 304 767 416 673 528 705 640 585 752 631 864 493 976 544 1088 405 1200 450 1312 317 1424 365 1540 213 1712 267" fill="none" stroke="#b7ff00" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+  <circle cx="1712" cy="267" r="14" fill="#b7ff00"/>
+  <g fill="#a9b7d0" font-family="Arial, sans-serif" font-size="20" font-weight="600" letter-spacing="3">
+    <text x="80" y="890">S&amp;P 500</text>
+    <text x="300" y="890">BITCOIN</text>
+    <text x="495" y="890">PCE</text>
+    <text x="610" y="890">GDP</text>
+    <text x="730" y="890">UNEMPLOYMENT</text>
+    <text x="1035" y="890">10Y TREASURY</text>
+  </g>
+</svg>
