@@ -1,5 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
+import { extractHouseholdCreditSeries, latestHouseholdCreditWorkbookUrl } from "./lib/ny-fed-xlsx.mjs";
 
 async function fetchYahoo(symbol, label, startYear) {
   const start = Math.floor(Date.UTC(startYear, 0, 1) / 1000);
@@ -45,16 +46,32 @@ async function fetchFred(seriesId) {
   });
 }
 
-const [sp500, unemployment, gdp, treasury10y, pce, bitcoin] = await Promise.all([
+async function fetchHouseholdCredit() {
+  const databankResponse = await fetch("https://www.newyorkfed.org/microeconomics/databank", {
+    headers: { accept: "text/html", "user-agent": "Ticker-GitHub-Pages/1.0" },
+  });
+  if (!databankResponse.ok) throw new Error(`New York Fed databank request returned HTTP ${databankResponse.status}`);
+  const workbookUrl = latestHouseholdCreditWorkbookUrl(await databankResponse.text());
+  const workbookResponse = await fetch(workbookUrl, {
+    headers: { accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "user-agent": "Ticker-GitHub-Pages/1.0" },
+  });
+  if (!workbookResponse.ok) throw new Error(`New York Fed workbook request returned HTTP ${workbookResponse.status}`);
+  return extractHouseholdCreditSeries(await workbookResponse.arrayBuffer());
+}
+
+const [sp500, unemployment, gdp, treasury10y, pce, bitcoin, householdCredit] = await Promise.all([
   fetchYahoo("^GSPC", "S&P 500", 2000),
   fetchFred("UNRATE"),
-  fetchFred("GDP"),
+  fetchFred("GDPC1"),
   fetchFred("DGS10"),
   fetchFred("PCEPI"),
   fetchYahoo("BTC-USD", "Bitcoin", 2010),
+  fetchHouseholdCredit(),
 ]);
 
-for (const [name, observations] of Object.entries({ sp500, unemployment, gdp, treasury10y, pce, bitcoin })) {
+const { mortgageOriginations, mortgageBalance, autoOriginations, autoBalance } = householdCredit;
+
+for (const [name, observations] of Object.entries({ sp500, unemployment, gdp, treasury10y, pce, bitcoin, mortgageOriginations, mortgageBalance, autoOriginations, autoBalance })) {
   if (observations.length < 2) throw new Error(`${name} did not contain enough observations`);
 }
 
@@ -62,6 +79,6 @@ const destination = resolve("data", "sp500.json");
 await mkdir(dirname(destination), { recursive: true });
 await writeFile(destination, JSON.stringify({
   retrievedAt: new Date().toISOString(),
-  series: { sp500, unemployment, gdp, treasury10y, pce, bitcoin },
+  series: { sp500, unemployment, gdp, treasury10y, pce, bitcoin, mortgageOriginations, mortgageBalance, autoOriginations, autoBalance },
 }));
-console.log(`Prepared six Ticker series for GitHub Pages`);
+console.log(`Prepared ten Ticker series for GitHub Pages`);
